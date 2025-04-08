@@ -13,8 +13,13 @@ function App() {
     window.EXCALIDRAW_ASSET_PATH = "/";
 
     window.addEventListener("beforeunload", () => {
-      localStorage.setItem("excalidrawState", JSON.stringify(appState));
-      localStorage.setItem("excalidrawElements", JSON.stringify(elements));
+      let currentAppState = excalidrawAPI.getAppState();
+      let currentElements = excalidrawAPI.getSceneElements();
+
+      delete currentAppState.collaborators;
+
+      localStorage.setItem("excalidrawState", JSON.stringify(currentAppState));
+      localStorage.setItem("excalidrawElements", JSON.stringify(currentElements));
     });
 
     const savedState = localStorage.getItem("excalidrawState");
@@ -30,14 +35,7 @@ function App() {
     }
 
     setMounted(true);
-  }, []);
-
-  function handleOnChange(newElements, newState) {
-    newState.collaborators = [];
-
-    localStorage.setItem("excalidrawState", JSON.stringify(newState));
-    localStorage.setItem("excalidrawElements", JSON.stringify(newElements));
-  }
+  }, [excalidrawAPI]);
 
   return (
     <main className="container">
@@ -48,12 +46,10 @@ function App() {
             appState: appState,
             elements: elements,
           }}
-          onChange={(elements, appState) => {
-            handleOnChange(elements, appState);
-          }}
        />
       ) : (
         <div className="loading">
+          <div className="loading-spinner"></div>
           <p>Loading...</p>
         </div>
       )}
