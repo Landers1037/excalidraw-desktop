@@ -12,9 +12,9 @@
   "app": {
     "windows": [
       {
-        "title": "excalidraw-desktop",
-        "width": 800,
-        "height": 600
+        "title": "Excalidraw Desktop",
+        "width": 1000,
+        "height": 700
       }
     ],
     "security": {
