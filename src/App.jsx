@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Excalidraw } from "@excalidraw/excalidraw";
 import "@excalidraw/excalidraw/index.css";
 import "./App.css";
+import TitleBar from "./components/TitleBar";
 
 function App() {
   const [excalidrawAPI, setExcalidrawAPI] = useState(null);
@@ -38,22 +39,25 @@ function App() {
   }, [excalidrawAPI]);
 
   return (
-    <main className="container">
-      {mounted ? (
-        <Excalidraw
-          excalidrawAPI={(api) => setExcalidrawAPI(api)}
-          initialData={{
-            appState: appState,
-            elements: elements,
-          }}
-       />
-      ) : (
-        <div className="loading">
-          <div className="loading-spinner"></div>
-          <p>Loading...</p>
-        </div>
-      )}
-    </main>
+    <div className="app">
+      <TitleBar />
+      <main className="container">
+        {mounted ? (
+          <Excalidraw
+            excalidrawAPI={(api) => setExcalidrawAPI(api)}
+            initialData={{
+              appState: appState,
+              elements: elements,
+            }}
+         />
+        ) : (
+          <div className="loading">
+            <div className="loading-spinner"></div>
+            <p>Loading...</p>
+          </div>
+        )}
+      </main>
+    </div>
   );
 }
 

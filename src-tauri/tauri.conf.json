@@ -14,7 +14,12 @@
       {
         "title": "Excalidraw Desktop",
         "width": 1000,
-        "height": 700
+        "height": 700,
+        "decorations": false,
+        "resizable": true,
+        "minimizable": true,
+        "maximizable": true,
+        "closable": true
       }
     ],
     "security": {
