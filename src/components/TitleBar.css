@@ -12,6 +12,8 @@
   z-index: 9999;
   user-select: none;
   -webkit-user-select: none;
+  /* Tauri 拖拽区域样式 */
+  -webkit-app-region: drag;
 }
 
 .titlebar-content {
@@ -19,15 +21,25 @@
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding: 0 8px;
 }
 
 .titlebar-title {
-  flex: 1;
   display: flex;
   align-items: center;
   padding-left: 8px;
+  min-width: 150px;
+}
+
+.titlebar-menu {
+  width: auto;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 20px;
+  /* 防止菜单被拖拽区域影响 */
+  -webkit-app-region: no-drag;
 }
 
 .titlebar-title span {
@@ -41,6 +53,8 @@
   display: flex;
   align-items: center;
   gap: 1px;
+  margin-left: auto;
+  flex-shrink: 0;
 }
 
 .titlebar-button {
@@ -54,6 +68,8 @@
   cursor: pointer;
   transition: background-color 0.15s ease;
   color: #495057;
+  /* 防止按钮被拖拽区域影响 */
+  -webkit-app-region: no-drag;
 }
 
 .titlebar-button:hover {

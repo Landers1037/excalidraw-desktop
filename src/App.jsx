@@ -14,13 +14,15 @@ function App() {
     window.EXCALIDRAW_ASSET_PATH = "/";
 
     window.addEventListener("beforeunload", () => {
-      let currentAppState = excalidrawAPI.getAppState();
-      let currentElements = excalidrawAPI.getSceneElements();
+      if (excalidrawAPI) {
+        let currentAppState = excalidrawAPI.getAppState();
+        let currentElements = excalidrawAPI.getSceneElements();
 
-      delete currentAppState.collaborators;
+        delete currentAppState.collaborators;
 
-      localStorage.setItem("excalidrawState", JSON.stringify(currentAppState));
-      localStorage.setItem("excalidrawElements", JSON.stringify(currentElements));
+        localStorage.setItem("excalidrawState", JSON.stringify(currentAppState));
+        localStorage.setItem("excalidrawElements", JSON.stringify(currentElements));
+      }
     });
 
     const savedState = localStorage.getItem("excalidrawState");
@@ -40,7 +42,7 @@ function App() {
 
   return (
     <div className="app">
-      <TitleBar />
+      <TitleBar excalidrawAPI={excalidrawAPI} />
       <main className="container">
         {mounted ? (
           <Excalidraw

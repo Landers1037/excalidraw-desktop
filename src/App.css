@@ -14,11 +14,10 @@ html, body {
 }
 
 .container {
-  margin: 0 auto;
+  margin: 32px auto 0;
   padding: 0;
   width: 100%;
-  height: calc(100vh - 32px);
-  margin-top: 32px;
+  height: calc(100vh - 64px);
   overflow: hidden;
   overscroll-behavior: none;
 }

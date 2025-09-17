@@ -1,32 +1,33 @@
 import React from 'react';
-import { getCurrentWindow } from '@tauri-apps/api/window';
+import MenuBar from './MenuBar';
 import './TitleBar.css';
 
 /**
  * 自定义标题栏组件
- * 提供窗口控制按钮和拖拽功能
+ * 提供窗口控制按钮、拖拽功能和菜单栏
  */
-const TitleBar = () => {
-  // 获取当前窗口实例
-  const currentWindow = getCurrentWindow();
-
-  // 开始拖拽窗口
-  const handleStartDrag = async (e) => {
-    // 防止在按钮上触发拖拽
-    if (e.target.closest('.titlebar-button')) {
-      return;
-    }
-    try {
-      await currentWindow.startDragging();
-    } catch (error) {
-      console.error('开始拖拽失败:', error);
-    }
+const TitleBar = ({ excalidrawAPI }) => {
+  // 检查是否在 Tauri 环境中
+  console.log(window)
+  const isTauri = typeof window !== 'undefined' && window.isTauri;
+  
+  // 获取当前窗口实例（仅在 Tauri 环境中）
+  const getCurrentWindowSafe = async () => {
+    if (!isTauri) return null;
+    const { getCurrentWindow } = await import('@tauri-apps/api/window');
+    return getCurrentWindow();
   };
+
+
 
   // 最小化窗口
   const handleMinimize = async () => {
+    if (!isTauri) return;
     try {
-      await currentWindow.minimize();
+      const currentWindow = await getCurrentWindowSafe();
+      if (currentWindow) {
+        await currentWindow.minimize();
+      }
     } catch (error) {
       console.error('最小化窗口失败:', error);
     }
@@ -34,12 +35,16 @@ const TitleBar = () => {
 
   // 最大化/还原窗口
   const handleMaximize = async () => {
+    if (!isTauri) return;
     try {
-      const isMaximized = await currentWindow.isMaximized();
-      if (isMaximized) {
-        await currentWindow.unmaximize();
-      } else {
-        await currentWindow.maximize();
+      const currentWindow = await getCurrentWindowSafe();
+      if (currentWindow) {
+        const isMaximized = await currentWindow.isMaximized();
+        if (isMaximized) {
+          await currentWindow.unmaximize();
+        } else {
+          await currentWindow.maximize();
+        }
       }
     } catch (error) {
       console.error('最大化/还原窗口失败:', error);
@@ -48,18 +53,26 @@ const TitleBar = () => {
 
   // 关闭窗口
   const handleClose = async () => {
+    if (!isTauri) return;
     try {
-      await currentWindow.close();
+      const currentWindow = await getCurrentWindowSafe();
+      if (currentWindow) {
+        await currentWindow.close();
+      }
     } catch (error) {
       console.error('关闭窗口失败:', error);
     }
   };
 
   return (
-    <div className="titlebar" onMouseDown={handleStartDrag}>
+    <div className="titlebar" data-tauri-drag-region>
       <div className="titlebar-content">
         <div className="titlebar-title">
           <span>Excalidraw Desktop</span>
+        </div>
+        
+        <div className="titlebar-menu">
+          <MenuBar excalidrawAPI={excalidrawAPI} />
         </div>
         
         <div className="titlebar-controls">
